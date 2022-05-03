@@ -9,14 +9,25 @@ export interface Crypto {
   token: string
   created_at: number
   updated_at: number
-  history?: CryptoHistory[]
+  history: CryptoHistory[]
 }
 
 class CryptoRepository {
   private TABLE_NAME = 'crypto2'
 
   async getAll() {
-    return Database.scan({ TableName: this.TABLE_NAME }).promise()
+    return Database.scan({
+      TableName: this.TABLE_NAME,
+    }).promise()
+  }
+
+  async get(tokenId: string) {
+    return Database.get({
+      TableName: this.TABLE_NAME,
+      Key: {
+        token: tokenId,
+      },
+    }).promise()
   }
 
   async insert(tokens: Crypto[] | Crypto) {
@@ -35,6 +46,15 @@ class CryptoRepository {
     return Database.batchWrite({
       RequestItems: {
         [this.TABLE_NAME]: request,
+      },
+    }).promise()
+  }
+
+  async deleteOne(tokenId: string) {
+    return Database.delete({
+      TableName: this.TABLE_NAME,
+      Key: {
+        token: tokenId,
       },
     }).promise()
   }

@@ -8,7 +8,7 @@ export default class TokensController {
   async index(request: Request, response: Response) {
     const data: ScanOutput = await new CryptoRepository().getAll()
 
-    return response.json({ tokens: data.Items })
+    return response.json({ token: data.Items })
   }
 
   async get(request: Request, response: Response) {
@@ -19,7 +19,12 @@ export default class TokensController {
       return response.status(400).json({ errors: validation.array() })
     }
 
-    response.json({ ok: true, token: tokenId })
+    try {
+      const registeredToken = await new CryptoRepository().get(tokenId)
+      response.json({ token: registeredToken.Item })
+    } catch (e) {
+      response.status(500).json({ error: 'Internal Server Error' }).send()
+    }
   }
 
   async create(request: Request, response: Response) {
@@ -31,8 +36,25 @@ export default class TokensController {
     }
 
     const cryptoService = new CryptoService()
-    await cryptoService.createNewCrypto(tokens)
+    const uniqueTokens = await cryptoService.getUniqueCryptos(tokens)
 
-    return response.json({ ok: true, tokens })
+    try {
+      await cryptoService.createNewCrypto(uniqueTokens)
+    } catch (e) {
+      return response.status(400).json({ error: 'Error on inserting tokens. Please, try again.' })
+    }
+
+    return response.send()
+  }
+
+  async delete(request: Request, response: Response) {
+    const { tokenId } = request.params
+
+    try {
+      await new CryptoRepository().deleteOne(tokenId)
+      return response.send()
+    } catch (e) {
+      return response.status(500).json({ error: 'Internal Server Error' })
+    }
   }
 }
