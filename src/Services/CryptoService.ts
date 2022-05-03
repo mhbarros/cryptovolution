@@ -33,7 +33,7 @@ class CryptoService {
         return
       }
 
-      const timestamp = Math.round(Date.now())
+      const timestamp = Math.round(Date.now() / 1000)
 
       const Token: Crypto = {
         token: token.toUpperCase(),
