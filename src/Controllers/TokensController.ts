@@ -14,14 +14,20 @@ export default class TokensController {
 
   async get(request: Request, response: Response) {
     const { tokenId } = request.params
+    let { limit } = request.query as { limit: any }
+
     const validation = validationResult(request)
 
     if (!validation.isEmpty()) {
       return response.status(400).json({ errors: validation.array() })
     }
 
+    if (limit) {
+      limit = Number(limit)
+    }
+
     try {
-      const registeredToken = await new CryptoService().getCryptoById(tokenId)
+      const registeredToken = await new CryptoService().getCryptoById(tokenId, limit)
       response.json(registeredToken)
     } catch (e) {
       response.status(500).json({ error: 'Internal Server Error' }).send()

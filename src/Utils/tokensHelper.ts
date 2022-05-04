@@ -405,3 +405,15 @@ export const getFormattedTokenValue = (value: number): number => {
 
   return formattedPrice
 }
+
+export const limitTokenHistory = (history: number[], limit: number): number[] => {
+  let newTokenHistory: number[]
+
+  if (limit === 0) {
+    newTokenHistory = []
+  } else {
+    newTokenHistory = history.slice(limit * -1)
+  }
+
+  return newTokenHistory
+}

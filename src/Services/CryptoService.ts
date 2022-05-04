@@ -2,7 +2,7 @@ import CryptoRepository, { Crypto } from '../Repository/CryptoRepository'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { BatchWriteItemOutput, ScanOutput } from 'aws-sdk/clients/dynamodb'
 import { AWSError } from 'aws-sdk'
-import { isTokenAvailable } from '../Utils/tokensHelper'
+import { isTokenAvailable, limitTokenHistory } from '../Utils/tokensHelper'
 
 interface CryptoToken {
   token: string
@@ -47,13 +47,17 @@ class CryptoService {
     })
   }
 
-  async getCryptoById(tokenId: string) {
+  async getCryptoById(tokenId: string, historyLimit?: number) {
     const crypto = await new CryptoRepository().get(tokenId.toUpperCase())
     if (!crypto.Item) {
       return null
     }
 
     const token = crypto.Item as CryptoToken
+
+    if (typeof historyLimit !== 'undefined') {
+      token.history = limitTokenHistory(token.history, historyLimit)
+    }
 
     return {
       ...token,
