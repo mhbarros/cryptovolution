@@ -40,12 +40,6 @@ class CoinLayer {
       throw new Error('Unable to get live data.')
     }
   }
-
-  /*async listAvailableTokens(): string[] {
-    if (!this.coinlayer) return
-
-    await this.coinlayer.get('')
-  }*/
 }
 
 export default CoinLayer

@@ -2,13 +2,13 @@ import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
 import CryptoService from '../Services/CryptoService'
 import CryptoRepository from '../Repository/CryptoRepository'
-import { ScanOutput } from 'aws-sdk/clients/dynamodb'
+import CoinLayerService from '../Services/CoinLayerService'
 
 export default class TokensController {
   async index(request: Request, response: Response) {
-    const data: ScanOutput = await new CryptoRepository().getAll()
+    const cryptos = await new CryptoService().getAllCryptos()
 
-    return response.json({ token: data.Items })
+    return response.json({ tokens: cryptos })
   }
 
   async get(request: Request, response: Response) {
@@ -20,8 +20,8 @@ export default class TokensController {
     }
 
     try {
-      const registeredToken = await new CryptoRepository().get(tokenId)
-      response.json({ token: registeredToken.Item })
+      const registeredToken = await new CryptoService().getCryptoById(tokenId)
+      response.json(registeredToken)
     } catch (e) {
       response.status(500).json({ error: 'Internal Server Error' }).send()
     }
@@ -40,11 +40,12 @@ export default class TokensController {
 
     try {
       await cryptoService.createNewCrypto(uniqueTokens)
+      await new CoinLayerService().updateLiveData()
+
+      return response.send()
     } catch (e) {
       return response.status(400).json({ error: 'Error on inserting tokens. Please, try again.' })
     }
-
-    return response.send()
   }
 
   async delete(request: Request, response: Response) {

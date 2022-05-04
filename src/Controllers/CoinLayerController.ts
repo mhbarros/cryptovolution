@@ -4,7 +4,7 @@ import CoinLayerService from '../Services/CoinLayerService'
 class CoinLayerController {
   async get(request: Request, response: Response) {
     try {
-      const data = await new CoinLayerService().getLiveData()
+      const data = await new CoinLayerService().updateLiveData()
       response.json(data)
     } catch (e: any) {
       response.status(400).json({ error: e.message })

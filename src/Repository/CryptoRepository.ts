@@ -50,6 +50,20 @@ class CryptoRepository {
     }).promise()
   }
 
+  async appendTokenHistory(tokenId: string, newValue: number[]) {
+    return Database.update({
+      TableName: this.TABLE_NAME,
+      Key: {
+        token: tokenId,
+      },
+      UpdateExpression: 'SET history = list_append(history, :i), updated_at = :a',
+      ExpressionAttributeValues: {
+        ':i': newValue,
+        ':a': Math.round(Date.now() / 1000),
+      },
+    }).promise()
+  }
+
   async deleteOne(tokenId: string) {
     return Database.delete({
       TableName: this.TABLE_NAME,
