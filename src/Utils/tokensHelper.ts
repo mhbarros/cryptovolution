@@ -1,7 +1,7 @@
 /**
  * Return a list with available tokens to register
  */
-const getAvailableTokens = (): string[] => {
+export const getAvailableTokens = (): string[] => {
   return [
     '611',
     'ABC',
@@ -407,26 +407,31 @@ export const getFormattedTokenValue = (value: number): number => {
 }
 
 export const getEvolutionPercentage = (initialValue: number, finalValue: number): string => {
+  if (initialValue === 0 || isNaN(initialValue)) {
+    if (finalValue > 0) {
+      return `+${finalValue}%`
+    } else if (finalValue < 0) {
+      return `${finalValue}%`
+    }
+
+    return '0%'
+  }
   const evolution = Number((((finalValue - initialValue) / initialValue) * 100).toFixed(2))
   let evolutionPercentage = `${evolution}%`
 
   if (evolution > 0) {
     evolutionPercentage = `+${evolutionPercentage}`
   } else if (evolution < 0) {
-    evolutionPercentage = `-${evolutionPercentage}`
+    evolutionPercentage = `${evolutionPercentage}`
   }
 
   return evolutionPercentage
 }
 
 export const limitTokenHistory = (history: number[], limit: number): number[] => {
-  let newTokenHistory: number[]
-
-  if (limit === 0) {
-    newTokenHistory = []
-  } else {
-    newTokenHistory = history.slice(limit * -1)
+  if (limit < 0) {
+    limit = 0
   }
 
-  return newTokenHistory
+  return limit === 0 ? [] : history.slice(limit * -1)
 }

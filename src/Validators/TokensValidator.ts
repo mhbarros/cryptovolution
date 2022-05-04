@@ -6,12 +6,7 @@ class TokensValidator {
   static get() {
     return [
       param('tokenId', 'Invalid token ID').isString().isLength({ max: this.MAX_TOKEN_SIZE }),
-      query('limit')
-        .isNumeric()
-        .withMessage('Only numbers allowed')
-        .isInt({ min: 0 })
-        .withMessage('The limit must be equal or bigger than zero')
-        .optional(),
+      query('limit').isInt({ min: 0 }).withMessage('The limit must be a number equal or bigger than zero').optional(),
     ]
   }
 

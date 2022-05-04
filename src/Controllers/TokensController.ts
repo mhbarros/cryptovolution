@@ -1,9 +1,8 @@
 import { Request, Response } from 'express'
 import { validationResult } from 'express-validator'
+
 import CryptoService from '../Services/CryptoService'
-import CryptoRepository from '../Repository/CryptoRepository'
 import CoinLayerService from '../Services/CoinLayerService'
-import * as Crypto from 'crypto'
 
 export default class TokensController {
   async index(request: Request, response: Response) {
@@ -29,8 +28,8 @@ export default class TokensController {
     try {
       const registeredToken = await new CryptoService().getCryptoById(tokenId, limit)
       response.json(registeredToken)
-    } catch (e) {
-      response.status(500).json({ error: 'Internal Server Error' }).send()
+    } catch (e: any) {
+      response.status(400).json({ error: e.message }).send()
     }
   }
 
@@ -43,13 +42,14 @@ export default class TokensController {
     }
 
     const cryptoService = new CryptoService()
-    const uniqueTokens = await cryptoService.getUniqueCryptos(tokens)
 
     try {
+      const uniqueTokens = await cryptoService.getUniqueCryptos(tokens)
       await cryptoService.createNewCrypto(uniqueTokens)
+
       await new CoinLayerService().updateLiveData()
 
-      return response.send()
+      return response.status(201).send()
     } catch (e: any) {
       return response.status(400).json({ error: e.message })
     }
@@ -66,8 +66,8 @@ export default class TokensController {
     try {
       await new CryptoService().deleteCrypto(tokenId)
       return response.send()
-    } catch (e) {
-      return response.status(500).json({ error: 'Internal Server Error' })
+    } catch (e: any) {
+      return response.status(500).json({ error: e.message })
     }
   }
 }
