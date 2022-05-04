@@ -406,6 +406,19 @@ export const getFormattedTokenValue = (value: number): number => {
   return formattedPrice
 }
 
+export const getEvolutionPercentage = (initialValue: number, finalValue: number): string => {
+  const evolution = Number((((finalValue - initialValue) / initialValue) * 100).toFixed(2))
+  let evolutionPercentage = `${evolution}%`
+
+  if (evolution > 0) {
+    evolutionPercentage = `+${evolutionPercentage}`
+  } else if (evolution < 0) {
+    evolutionPercentage = `-${evolutionPercentage}`
+  }
+
+  return evolutionPercentage
+}
+
 export const limitTokenHistory = (history: number[], limit: number): number[] => {
   let newTokenHistory: number[]
 

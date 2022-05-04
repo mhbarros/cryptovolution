@@ -2,7 +2,7 @@ import CryptoRepository, { Crypto } from '../Repository/CryptoRepository'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { BatchWriteItemOutput, ScanOutput } from 'aws-sdk/clients/dynamodb'
 import { AWSError } from 'aws-sdk'
-import { isTokenAvailable, limitTokenHistory } from '../Utils/tokensHelper'
+import { getEvolutionPercentage, isTokenAvailable, limitTokenHistory } from '../Utils/tokensHelper'
 
 interface CryptoToken {
   token: string
@@ -61,7 +61,7 @@ class CryptoService {
 
     return {
       ...token,
-      evolution_rate: this.getEvolutionRate(token),
+      evolution_history: this.getEvolutionHistory(token),
     }
   }
 
@@ -73,7 +73,28 @@ class CryptoService {
     const finalValue = crypto.history.at(-1) as number
     const lastButOneValue = crypto.history.at(-2) as number
 
-    return Number((((finalValue - lastButOneValue) / lastButOneValue) * 100).toFixed(2)) + '%'
+    return getEvolutionPercentage(lastButOneValue, finalValue)
+  }
+
+  getEvolutionHistory(crypto: CryptoToken): string[] {
+    if (!crypto.history || crypto.history.length < 2) {
+      return []
+    }
+
+    const evolutionHistory: string[] = []
+
+    for (let i = 0; i < crypto.history.length; i++) {
+      const currentNumber = crypto.history[i]
+      const nextNumber = crypto.history[i + 1]
+
+      if (!nextNumber) {
+        break
+      }
+
+      evolutionHistory.push(getEvolutionPercentage(currentNumber, nextNumber))
+    }
+
+    return evolutionHistory
   }
 
   async createNewCrypto(tokens: string[]): Promise<PromiseResult<BatchWriteItemOutput, AWSError>> {
