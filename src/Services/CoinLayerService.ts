@@ -1,5 +1,6 @@
 import CryptoRepository from '../Repository/CryptoRepository'
 import CoinLayer from './api/CoinLayer'
+import { getFormattedTokenValue } from '../Utils/tokensHelper'
 
 class CoinLayerService {
   async updateLiveData() {
@@ -19,7 +20,9 @@ class CoinLayerService {
       const liveDataRates = Object.entries(liveData.rates)
 
       for (const [token, currentPrice] of liveDataRates) {
-        await new CryptoRepository().appendTokenHistory(token, [currentPrice])
+        const formattedPrice = getFormattedTokenValue(currentPrice)
+
+        await new CryptoRepository().appendTokenHistory(token, [formattedPrice])
       }
 
       return liveData

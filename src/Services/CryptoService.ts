@@ -2,7 +2,7 @@ import CryptoRepository, { Crypto } from '../Repository/CryptoRepository'
 import { PromiseResult } from 'aws-sdk/lib/request'
 import { BatchWriteItemOutput, ScanOutput } from 'aws-sdk/clients/dynamodb'
 import { AWSError } from 'aws-sdk'
-import { isTokenAvailable } from '../Utils/availableTokens'
+import { isTokenAvailable } from '../Utils/tokensHelper'
 
 interface CryptoToken {
   token: string

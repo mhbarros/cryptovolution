@@ -395,3 +395,12 @@ const getAvailableTokens = (): string[] => {
 export const isTokenAvailable = (token: string): boolean => {
   return getAvailableTokens().indexOf(token) >= 0
 }
+
+export const getFormattedTokenValue = (value: number): number => {
+  let formattedPrice = Number(value.toFixed(2))
+  if (value < 0) {
+    formattedPrice = value
+  }
+
+  return formattedPrice
+}
