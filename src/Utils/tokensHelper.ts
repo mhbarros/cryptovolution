@@ -398,7 +398,8 @@ export const isTokenAvailable = (token: string): boolean => {
 
 export const getFormattedTokenValue = (value: number): number => {
   let formattedPrice = Number(value.toFixed(2))
-  if (value < 0) {
+
+  if (value < 1) {
     formattedPrice = value
   }
 

@@ -80,7 +80,7 @@ class CryptoService {
       const tokenName = token.toUpperCase()
 
       if (!isTokenAvailable(tokenName)) {
-        return
+        throw new Error(`Invalid token: ${tokenName}`)
       }
 
       const timestamp = Math.round(Date.now() / 1000)
@@ -95,7 +95,11 @@ class CryptoService {
       tokenList.push(Token)
     })
 
-    return await cryptoRepository.insert(tokenList)
+    return cryptoRepository.insert(tokenList)
+  }
+
+  async deleteCrypto(tokenId: string) {
+    return new CryptoRepository().deleteOne(tokenId.toUpperCase())
   }
 }
 

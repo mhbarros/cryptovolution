@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator'
 import CryptoService from '../Services/CryptoService'
 import CryptoRepository from '../Repository/CryptoRepository'
 import CoinLayerService from '../Services/CoinLayerService'
+import * as Crypto from 'crypto'
 
 export default class TokensController {
   async index(request: Request, response: Response) {
@@ -43,16 +44,21 @@ export default class TokensController {
       await new CoinLayerService().updateLiveData()
 
       return response.send()
-    } catch (e) {
-      return response.status(400).json({ error: 'Error on inserting tokens. Please, try again.' })
+    } catch (e: any) {
+      return response.status(400).json({ error: e.message })
     }
   }
 
   async delete(request: Request, response: Response) {
     const { tokenId } = request.params
+    const validation = validationResult(request)
+
+    if (!validation.isEmpty()) {
+      return response.status(400).json({ errors: validation.array() })
+    }
 
     try {
-      await new CryptoRepository().deleteOne(tokenId)
+      await new CryptoService().deleteCrypto(tokenId)
       return response.send()
     } catch (e) {
       return response.status(500).json({ error: 'Internal Server Error' })

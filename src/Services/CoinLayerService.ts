@@ -14,7 +14,7 @@ class CoinLayerService {
     try {
       const liveData = await new CoinLayer().getLiveData(currentItems)
       if (!liveData) {
-        return false
+        throw new Error('Unable to get live data. Please. try again.')
       }
 
       const liveDataRates = Object.entries(liveData.rates)
