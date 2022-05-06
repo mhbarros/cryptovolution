@@ -1,3 +1,6 @@
+/**
+ * The main file from the express framework. This is the place that the functions are defined.
+ */
 import serverless from 'serverless-http'
 
 import App from './src/app'
