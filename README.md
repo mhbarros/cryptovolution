@@ -104,6 +104,7 @@ npm run dev
 
 With the project running, now you have access to every endpoint that Cryptovolution has.
 
+### Postman
 You can see the list of endpoints and their descriptions using [this postman](https://www.getpostman.com/collections/d14eb4627c26d935548a). Also, the exported json from postman is available at [_postman](https://github.com/mhbarros/cryptovolution/tree/main/_postman) folder
 
 ### Updating crypto tokens history locally
