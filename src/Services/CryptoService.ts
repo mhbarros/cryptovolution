@@ -3,13 +3,7 @@ import { PromiseResult } from 'aws-sdk/lib/request'
 import { BatchWriteItemOutput, ScanOutput } from 'aws-sdk/clients/dynamodb'
 import { AWSError } from 'aws-sdk'
 import { getEvolutionPercentage, isTokenAvailable, limitTokenHistory } from '../Utils/tokensHelper'
-
-interface CryptoToken {
-  token: string
-  created_at: number
-  updated_at: number
-  history: number[]
-}
+import { CryptoToken } from '../Interfaces/CryptoToken'
 
 class CryptoService {
   /**
@@ -22,6 +16,7 @@ class CryptoService {
     const cryptoRepository = new CryptoRepository()
 
     const { Items } = await cryptoRepository.getAll()
+
     if (!Items) {
       return tokens
     }
@@ -36,19 +31,22 @@ class CryptoService {
 
     if (!data.Items) return []
 
-    const cryptoService = new CryptoService()
+    const _this = this
 
     return data.Items.map((token) => {
       const cryptoToken = token as unknown as CryptoToken
+      const tokenEvolutionRate = _this.getEvolutionRate(cryptoToken)
+
       return {
         ...token,
-        evolution_rate: cryptoService.getEvolutionRate(cryptoToken),
+        evolution_rate: tokenEvolutionRate,
       }
     })
   }
 
   async getCryptoById(tokenId: string, historyLimit?: number) {
     const crypto = await new CryptoRepository().get(tokenId.toUpperCase())
+
     if (!crypto.Item) {
       return null
     }
@@ -59,9 +57,11 @@ class CryptoService {
       token.history = limitTokenHistory(token.history, historyLimit)
     }
 
+    const tokenEvolutionHistory = this.getEvolutionHistory(token)
+
     return {
       ...token,
-      evolution_history: this.getEvolutionHistory(token),
+      evolution_history: tokenEvolutionHistory,
     }
   }
 
@@ -97,7 +97,7 @@ class CryptoService {
     return evolutionHistory
   }
 
-  async createNewCrypto(tokens: string[]): Promise<PromiseResult<BatchWriteItemOutput, AWSError>> {
+  async createNewCrypto(tokens: string[]) {
     const cryptoRepository = new CryptoRepository()
     const tokenList: any = []
 
@@ -110,7 +110,7 @@ class CryptoService {
 
       const timestamp = Math.round(Date.now() / 1000)
 
-      const Token: Crypto = {
+      const Token: CryptoToken = {
         token: tokenName,
         created_at: timestamp,
         updated_at: timestamp,
@@ -124,7 +124,8 @@ class CryptoService {
   }
 
   async deleteCrypto(tokenId: string) {
-    return new CryptoRepository().deleteOne(tokenId.toUpperCase())
+    const tokenName = tokenId.toUpperCase()
+    return new CryptoRepository().deleteOne(tokenName)
   }
 }
 

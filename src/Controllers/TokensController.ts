@@ -27,7 +27,11 @@ export default class TokensController {
 
     try {
       const registeredToken = await new CryptoService().getCryptoById(tokenId, limit)
-      response.json(registeredToken)
+      if (!registeredToken) {
+        return response.status(400).json({ error: 'Token not found' })
+      }
+
+      return response.json(registeredToken)
     } catch (e: any) {
       response.status(400).json({ error: e.message }).send()
     }
