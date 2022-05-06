@@ -66,7 +66,8 @@ git clone git@github.com:mhbarros/cryptovolution.git
 
 3. Define the environment variables<br/>
    - Clone the file `.env.example` and rename-it to `.env`
-   - Clone `.env.yaml.example` and rename it to `.env.yaml`. In both files, fill the following environment variables:<br/>
+   - Clone `.env.yaml.example` and rename it to `.env.yaml`.
+   - In both files, fill the following environment variables:<br/>
    
 | Variable           | Description                                                                                                         | Required |
 |--------------------|---------------------------------------------------------------------------------------------------------------------|----------|
@@ -105,7 +106,7 @@ With the project running, now you have access to every endpoint that Cryptovolut
 
 You can see the list of endpoints and their descriptions using [this postman](https://www.getpostman.com/collections/d14eb4627c26d935548a). Also, the exported json from postman is available at [_postman](https://github.com/mhbarros/cryptovolution/tree/main/_postman) folder
 
-### Updating cryptos history
+### Updating crypto tokens history locally
 When you have some crypto tokens registered using the `POST /tokens` endpoint, you may want to get some information to append into the history of values. To do that, you need to invoke the `updateCryptoValues` function locally, by running:
 
 ```sh
