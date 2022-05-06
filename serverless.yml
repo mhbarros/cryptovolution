@@ -1,11 +1,12 @@
 org: mhbarros
 app: cryptovolution
 service: cryptovolution
-frameworkVersion: '3'
 useDotenv: true
+frameworkVersion: '3'
 
 custom:
-  tableName: 'crypto2'
+  TABLE_CRYPTO_NAME: 'crypto'
+  CRYPTO_UPDATE_INTERVAL: '2 minutes'
   dynamodb:
     stages:
       - dev
@@ -22,6 +23,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs14.x
+  stage: dev
   iam:
     role:
       statements:
@@ -37,13 +39,20 @@ provider:
           Resource:
             - Fn::GetAtt: [ CryptoTable2, Arn ]
   environment:
-    USERS_TABLE: ${self:custom.tableName}
+    TABLE_CRYPTO_NAME: ${self:custom.TABLE_CRYPTO_NAME}
+    COINLAYER_API_KEY: ${file(./.env.yaml):COINLAYER_API_KEY}
+    COINLAYER_CURRENCY: ${file(./.env.yaml):COINLAYER_CURRENCY}
 
 functions:
   api:
     handler: handler.handler
     events:
       - httpApi: '*'
+  updateCryptoValues:
+    handler: handler.updateCryptoValues
+    events:
+      - eventBridge:
+          schedule: rate(${self:custom.CRYPTO_UPDATE_INTERVAL})
 
 plugins:
   - serverless-plugin-typescript
@@ -54,7 +63,7 @@ resources:
     CryptoTable2:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tableName}
+        TableName: ${self:custom.TABLE_CRYPTO_NAME}
         AttributeDefinitions:
           - AttributeName: token
             AttributeType: S

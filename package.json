@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "dev": "nodemon app.local.ts",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "deploy": "serverless deploy"
   },
   "dependencies": {
     "aws-sdk": "^2.1125.0",

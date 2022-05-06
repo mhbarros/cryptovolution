@@ -13,7 +13,7 @@ export interface Crypto {
 }
 
 class CryptoRepository {
-  private TABLE_NAME = 'crypto2'
+  private TABLE_NAME = 'crypto'
 
   async getAll() {
     return Database.scan({

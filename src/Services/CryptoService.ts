@@ -70,8 +70,8 @@ class CryptoService {
       return '0%'
     }
 
-    const finalValue = crypto.history.at(-1) as number
-    const lastButOneValue = crypto.history.at(-2) as number
+    const finalValue = crypto.history[crypto.history.length - 1] as number
+    const lastButOneValue = crypto.history[crypto.history.length - 2] as number
 
     return getEvolutionPercentage(lastButOneValue, finalValue)
   }
