@@ -105,6 +105,12 @@ With the project running, now you have access to every endpoint that Cryptovolut
 
 You can see the list of endpoints and their descriptions using [this postman](https://www.getpostman.com/collections/d14eb4627c26d935548a). Also, the exported json from postman is available at [_postman](https://github.com/mhbarros/cryptovolution/tree/main/_postman) folder
 
+### Updating cryptos history
+When you have some crypto tokens registered using the `POST /tokens` endpoint, you may want to get some information to append into the history of values. To do that, you need to invoke the `updateCryptoValues` function locally, by running:
+
+```sh
+npm run update:cryptos
+```
 
 ## Testing
 To run the project unit tests:
@@ -120,11 +126,18 @@ npm run tests:coverage
 
 ## Deploy
 
+### Requirements
 To deploy a instance of Cryptovolution into production environment, you need to have:
 - A Serverless Framework account ([create it here](https://app.serverless.com/))
 - An [AWS](https://aws.amazon.com/pt/) Account
 - A user within IAM that is capable of creating the services that Serverless Framework requires. You can check how to setup a user [here](https://www.serverless.com/framework/docs/providers/aws/guide/credentials)
 
+<br/>
+
+### Setting up a scheduled time to update crypto values
+To setup a custom time to auto update all registered crypto tokens in production, you can update the environment variable `CRYPTO_UPDATE_INTERVAL` into **serverless.xml**, using the pattern described into this documentation: https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html#eb-rate-expressions
+
+### Time to deploy
 <br/>
 After setup everything correctly, you can deploy the project to your aws account by running:
 
