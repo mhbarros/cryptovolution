@@ -416,7 +416,7 @@ export const getEvolutionPercentage = (initialValue: number, finalValue: number)
 
     return '0%'
   }
-  const evolution = Number((((finalValue - initialValue) / initialValue) * 100).toFixed(2))
+  const evolution = Number((((finalValue - initialValue) / initialValue) * 100).toFixed(3))
   let evolutionPercentage = `${evolution}%`
 
   if (evolution > 0) {

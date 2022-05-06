@@ -156,7 +156,7 @@ describe('Get Crypto By Id', () => {
     expect(token).toEqual({
       token: 'BTC',
       history: [10, 15, 30, 32],
-      evolution_history: ['+50%', '+100%', '+6.67%'],
+      evolution_history: ['+50%', '+100%', '+6.667%'],
     })
   })
 
@@ -193,7 +193,7 @@ describe('Get Crypto By Id', () => {
     expect(token).toEqual({
       token: 'BTC',
       history: [30, 32],
-      evolution_history: ['+6.67%'],
+      evolution_history: ['+6.667%'],
     })
   })
 
