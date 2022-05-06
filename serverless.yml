@@ -6,7 +6,7 @@ frameworkVersion: '3'
 
 custom:
   TABLE_CRYPTO_NAME: 'crypto'
-  CRYPTO_UPDATE_INTERVAL: '2 minutes'
+  CRYPTO_UPDATE_INTERVAL: '30 minutes'
   dynamodb:
     stages:
       - dev
@@ -52,7 +52,7 @@ functions:
     handler: handler.updateCryptoValues
     events:
       - eventBridge:
-          enabled: false
+          enabled: true
           schedule: rate(${self:custom.CRYPTO_UPDATE_INTERVAL})
 
 plugins:

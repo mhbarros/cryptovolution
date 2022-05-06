@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a href="https://github.com/mhbarros/cryptovolution">
     <img src="img/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -10,7 +10,7 @@
   <p align="center">
     Create a list of cryptos and check their evolution over time
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/mhbarros/cryptovolution/blob/main/README.md"><strong>Explore the docs »</strong></a>
     <br />
     <br />
   </p>
