@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "nodemon",
     "dev": "nodemon app.local.ts",
     "test": "jest --runInBand",
-    "deploy": "serverless deploy"
+    "test:coverage": "jest --runInBand --coverage",
+    "deploy": "serverless deploy",
+    "migration": "serverless dynamodb migrate",
+    "update:cryptos": "serverless invoke local --function updateCryptoValues"
   },
   "dependencies": {
     "aws-sdk": "^2.1125.0",

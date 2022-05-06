@@ -17,7 +17,7 @@ class CoinLayerService {
     const currentItems = Items.map((token) => token.token) as string[]
 
     try {
-      const liveData: LiveDataOutput = await new CoinLayer().getLiveData(currentItems)
+      const liveData = (await new CoinLayer().getLiveData(currentItems)) as LiveDataOutput
 
       if (!liveData || !liveData.rates) {
         const liveDataError = liveData as any

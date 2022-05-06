@@ -1,0 +1,134 @@
+{
+	"info": {
+		"_postman_id": "7b8b187b-2648-42a2-b12f-b6d1b52d8138",
+		"name": "Cryptovolution",
+		"description": "The Cryptovolution available endpoints.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List available tokens",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/tokens/list-tokens",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"tokens",
+						"list-tokens"
+					]
+				},
+				"description": "Lists all available tokens to register"
+			},
+			"response": []
+		},
+		{
+			"name": "Create new tokens",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tokens\": [\"BTC\", \"ETH\"]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/tokens",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"tokens"
+					]
+				},
+				"description": "Creates new tokens on the platform.\n\nBody parameters:\n\n| **parameter** | **description** | **required** |\n| --- | --- | --- |\n| tokens | Array of tokens to add | yes |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get one token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/tokens/:token",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"tokens",
+						":token"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "0",
+							"description": "Limits the history of values. Default to none.",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "token",
+							"value": "BTC",
+							"description": "The token to retrieve"
+						}
+					]
+				},
+				"description": "Get a single token, its history of values and the evolution rate"
+			},
+			"response": []
+		},
+		{
+			"name": "List all tokens",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/tokens",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"tokens"
+					]
+				},
+				"description": "Lists all registered tokens and its current evolution rates"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete one token",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/tokens/:token",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"tokens",
+						":token"
+					],
+					"variable": [
+						{
+							"key": "token",
+							"value": "ETH",
+							"description": "The token to be deleted"
+						}
+					]
+				},
+				"description": "Deletes one token"
+			},
+			"response": []
+		}
+	]
+}

@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator'
 
 import CryptoService from '../Services/CryptoService'
 import CoinLayerService from '../Services/CoinLayerService'
+import { getAvailableTokens } from '../Utils/tokensHelper'
 
 export default class TokensController {
   async index(request: Request, response: Response) {
@@ -73,5 +74,9 @@ export default class TokensController {
     } catch (e: any) {
       return response.status(500).json({ error: e.message })
     }
+  }
+
+  async listAvailableTokens(request: Request, response: Response) {
+    response.json({ availableTokens: getAvailableTokens() })
   }
 }

@@ -1,27 +1,3 @@
-<div id="top"></div>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -73,6 +49,7 @@ To get a local copy up and running follow these simple example steps.
 You need to have these programs installed:
 * [NodeJS](https://nodejs.org/en/)
 * [Docker Desktop](https://www.docker.com/) (_or some other whay to run DynamoDB locally_)
+* [Docker compose](https://docs.docker.com/compose/install/)
 <br/><br/>
 #### Also, you are going to need an [API KEY from CoinLayer](https://coinlayer.com/documentation), which is the service that Cryptovolution uses to get currentcryptocurrencies prices.
 
@@ -88,8 +65,8 @@ git clone git@github.com:mhbarros/cryptovolution.git
 2. Get a free API KEY from [CoinLayer](https://coinlayer.com/documentation)
 
 3. Define the environment variables<br/>
-- Clone the file `.env.example` and rename-it to `.env`
-- Clone `.env.yaml.example` and rename it to `.env.yaml`. In both files, fill the environment variables.<br/>
+   - Clone the file `.env.example` and rename-it to `.env`
+   - Clone `.env.yaml.example` and rename it to `.env.yaml`. In both files, fill the following environment variables:<br/>
    
 | Variable           | Description                                                                                                         | Required |
 |--------------------|---------------------------------------------------------------------------------------------------------------------|----------|
@@ -97,22 +74,63 @@ git clone git@github.com:mhbarros/cryptovolution.git
 | DB_ENDPOINT        | The URL to connect to DynamoDB. If localhost and using docker provided by Cryptovolution, use http://localhost:8000 | yes      |
 | COINLAYER_API_KEY  | The API KEY given by CoinLayer services.                                                                            | yes      |
 | COINLAYER_CURRENCY | The currency to retrieve the crypto values. Ex: USD                                                                 | yes      |
+| PORT               | The HTTP port to run the project locally. Default: 3000                                                             | no       |
+
 
 4. Install NPM packages
     ```sh
     npm ci
     ```
+   
+5. Run docker-compose to create DynamoDB
+    ```sh
+   cd docker
+   docker-compose up -d
+    ```
+   
+6. Migrate database tables
+    ```sh
+   npm run migration
+    ```
 
 
-<!-- USAGE EXAMPLES -->
+<!-- USAGE -->
 ## Usage
+To start using Cryptovolution, start the project locally by running:
+```sh
+npm run dev
+```
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+With the project running, now you have access to every endpoint that Cryptovolution has.
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+You can see the list of endpoints and their descriptions using [this postman](https://www.getpostman.com/collections/d14eb4627c26d935548a). Also, the exported json from postman is available at [_postman](https://github.com/mhbarros/cryptovolution/tree/main/_postman) folder
 
-<p align="right">(<a href="#top">back to top</a>)</p>
 
+## Testing
+To run the project unit tests:
+```sh
+npm run tests
+```
+<br/>
+To run the project unit tests and generate a coverage report:
+
+```sh
+npm run tests:coverage
+```
+
+## Deploy
+
+To deploy a instance of Cryptovolution into production environment, you need to have:
+- A Serverless Framework account ([create it here](https://app.serverless.com/))
+- An [AWS](https://aws.amazon.com/pt/) Account
+- A user within IAM that is capable of creating the services that Serverless Framework requires. You can check how to setup a user [here](https://www.serverless.com/framework/docs/providers/aws/guide/credentials)
+
+<br/>
+After setup everything correctly, you can deploy the project to your aws account by running:
+
+```sh
+npm run deploy
+```
 
 
 
@@ -135,5 +153,5 @@ Marcelo Barros - mhbarros99@gmail.com
 [license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
 [license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
+[linkedin-url]: https://linkedin.com/in/mhbarros
 [product-screenshot]: images/screenshot.png

@@ -3,4 +3,4 @@ dotenv.config()
 
 import App from './src/app'
 
-App.listen(3000)
+App.listen(process.env.PORT || 3000)
