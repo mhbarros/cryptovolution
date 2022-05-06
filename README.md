@@ -44,7 +44,7 @@ You need to have these programs installed:
 * [Docker Desktop](https://www.docker.com/) (_or some other whay to run DynamoDB locally_)
 * [Docker compose](https://docs.docker.com/compose/install/)
 <br/><br/>
-#### Also, you are going to need an [API KEY from CoinLayer](https://coinlayer.com/documentation), which is the service that Cryptovolution uses to get currentcryptocurrencies prices.
+#### Also, you are going to need an [API KEY from CoinLayer](https://coinlayer.com/documentation), which is the service that Cryptovolution uses to get current cryptocurrencies prices.
 
 ### Installation
 
