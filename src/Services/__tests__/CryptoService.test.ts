@@ -44,7 +44,7 @@ describe('Get Unique Tokens', () => {
       return {
         getAll: () => {
           return {
-            Items: [],
+            Items: null,
           }
         },
       }
@@ -124,7 +124,7 @@ describe('Get All Cryptos', () => {
       return {
         getAll: () => {
           return {
-            Items: [],
+            Items: null,
           }
         },
       }
