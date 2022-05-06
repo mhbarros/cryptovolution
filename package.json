@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon",
     "dev": "nodemon app.local.ts",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --verbose",
     "test:coverage": "jest --runInBand --coverage",
     "deploy": "serverless deploy",
     "migration": "serverless dynamodb migrate",
