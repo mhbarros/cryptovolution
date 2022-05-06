@@ -1,3 +1,7 @@
+/**
+ * Define routes only for /tokens
+ */
+
 import express from 'express'
 
 import TokensController from '../Controllers/TokensController'

@@ -1,5 +1,5 @@
 /**
- * Return a list with available tokens to register
+ * Returns a list with available tokens to register
  */
 export const getAvailableTokens = (): string[] => {
   return [
@@ -392,10 +392,20 @@ export const getAvailableTokens = (): string[] => {
   ]
 }
 
+/**
+ * Returns true if the token is available to be registered
+ *
+ * @param token Token ID to check
+ */
 export const isTokenAvailable = (token: string): boolean => {
   return getAvailableTokens().indexOf(token) >= 0
 }
 
+/**
+ * Format the value of the token using two fraction digits if the value is bigger or equal 1
+ *
+ * @param value value to be formatted
+ */
 export const getFormattedTokenValue = (value: number): number => {
   let formattedPrice = Number(value.toFixed(2))
 
@@ -406,6 +416,12 @@ export const getFormattedTokenValue = (value: number): number => {
   return formattedPrice
 }
 
+/**
+ * Returns an evolution percentage based on initial and final number
+ *
+ * @param initialValue The first value
+ * @param finalValue The last value
+ */
 export const getEvolutionPercentage = (initialValue: number, finalValue: number): string => {
   if (initialValue === 0 || isNaN(initialValue)) {
     if (finalValue > 0) {
@@ -428,6 +444,11 @@ export const getEvolutionPercentage = (initialValue: number, finalValue: number)
   return evolutionPercentage
 }
 
+/**
+ * Limits the history of values, starting from the end.
+ * @param history The history of values
+ * @param limit How many numbers it will have
+ */
 export const limitTokenHistory = (history: number[], limit: number): number[] => {
   if (limit < 0) {
     limit = 0

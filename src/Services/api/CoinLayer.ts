@@ -1,31 +1,24 @@
 import axios, { AxiosInstance } from 'axios'
-
-interface LiveDataOutput {
-  success: boolean
-  terms: string
-  privacy: string
-  timestamp: number
-  target: string
-  rates: {
-    [token: string]: number
-  }
-}
+import { LiveDataOutput } from '../../Interfaces/api/CoinLayer/LiveData'
 
 class CoinLayer {
   private BASE_URL = 'http://api.coinlayer.com'
-  private coinlayer: AxiosInstance | undefined
-
-  private CURRENCY = process.env.COINLAYER_CURRENCY
+  private readonly coinlayer: AxiosInstance | undefined
 
   constructor() {
     this.coinlayer = axios.create({
       baseURL: this.BASE_URL,
       params: {
         access_key: process.env.COINLAYER_API_KEY,
+        target: process.env.COINLAYER_CURRENCY,
       },
     })
   }
 
+  /**
+   * This method returns the live data from CoinLayer for every given token
+   * @param tokens List of tokens to get data
+   */
   async getLiveData(tokens: string[]) {
     if (!this.coinlayer) return
 

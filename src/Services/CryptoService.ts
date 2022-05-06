@@ -1,9 +1,12 @@
-import CryptoRepository, { Crypto } from '../Repository/CryptoRepository'
-import { PromiseResult } from 'aws-sdk/lib/request'
-import { BatchWriteItemOutput, ScanOutput } from 'aws-sdk/clients/dynamodb'
-import { AWSError } from 'aws-sdk'
+import CryptoRepository from '../Repository/CryptoRepository'
+import { ScanOutput } from 'aws-sdk/clients/dynamodb'
+
 import { getEvolutionPercentage, isTokenAvailable, limitTokenHistory } from '../Utils/tokensHelper'
 import { CryptoToken } from '../Interfaces/CryptoToken'
+
+interface CryptoEvolution extends CryptoToken {
+  evolution_rate: string
+}
 
 class CryptoService {
   /**
@@ -26,7 +29,12 @@ class CryptoService {
     return tokens.filter((token) => parsedItems.indexOf(token) === -1)
   }
 
-  async getAllCryptos() {
+  /**
+   * Get all registered cryptos and format them, also adding the evolution rate
+   *
+   * @return a list of crypto tokens and their respectives evolution rates
+   */
+  async getAllCryptos(): Promise<CryptoEvolution[]> {
     const data: ScanOutput = await new CryptoRepository().getAll()
 
     if (!data.Items) return []
@@ -37,13 +45,24 @@ class CryptoService {
       const cryptoToken = token as unknown as CryptoToken
       const tokenEvolutionRate = _this.getEvolutionRate(cryptoToken)
 
-      return {
-        ...token,
+      const cryptoEvolution: CryptoEvolution = {
+        token: cryptoToken.token,
+        created_at: cryptoToken.created_at,
+        updated_at: cryptoToken.updated_at,
+        history: cryptoToken.history,
         evolution_rate: tokenEvolutionRate,
       }
+
+      return cryptoEvolution
     })
   }
 
+  /**
+   * Returns a crypto by its id and all its evolution history
+   *
+   * @param tokenId
+   * @param historyLimit
+   */
   async getCryptoById(tokenId: string, historyLimit?: number) {
     const crypto = await new CryptoRepository().get(tokenId.toUpperCase())
 
@@ -65,6 +84,11 @@ class CryptoService {
     }
   }
 
+  /**
+   * Returns the last evolution rate of token
+   *
+   * @param crypto Token to get evolution rate
+   */
   getEvolutionRate(crypto: CryptoToken): string {
     if (!crypto.history || crypto.history.length < 2) {
       return '0%'
@@ -76,6 +100,11 @@ class CryptoService {
     return getEvolutionPercentage(lastButOneValue, finalValue)
   }
 
+  /**
+   * Returns all evolution rates from token
+   *
+   * @param crypto Token to get evolution history
+   */
   getEvolutionHistory(crypto: CryptoToken): string[] {
     if (!crypto.history || crypto.history.length < 2) {
       return []
@@ -97,6 +126,11 @@ class CryptoService {
     return evolutionHistory
   }
 
+  /**
+   * Create a list of tokens, adding his necessary fields
+   *
+   * @param tokens List of tokens to be created
+   */
   async createNewCrypto(tokens: string[]) {
     const cryptoRepository = new CryptoRepository()
     const tokenList: any = []
@@ -123,6 +157,11 @@ class CryptoService {
     return cryptoRepository.insert(tokenList)
   }
 
+  /**
+   * Delete a crypto
+   *
+   * @param tokenId Token ID to be deleted
+   */
   async deleteCrypto(tokenId: string) {
     const tokenName = tokenId.toUpperCase()
     return new CryptoRepository().deleteOne(tokenName)
