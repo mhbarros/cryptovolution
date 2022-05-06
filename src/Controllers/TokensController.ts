@@ -72,7 +72,7 @@ export default class TokensController {
       await new CryptoService().deleteCrypto(tokenId)
       return response.send()
     } catch (e: any) {
-      return response.status(500).json({ error: e.message })
+      return response.status(400).json({ error: e.message })
     }
   }
 

@@ -164,6 +164,11 @@ class CryptoService {
    */
   async deleteCrypto(tokenId: string) {
     const tokenName = tokenId.toUpperCase()
+
+    if (!isTokenAvailable(tokenName)) {
+      throw new Error('Invalid token')
+    }
+
     return new CryptoRepository().deleteOne(tokenName)
   }
 }

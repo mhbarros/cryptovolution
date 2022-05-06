@@ -296,8 +296,40 @@ describe('DELETE', () => {
 
     const response = await request(app).delete('/tokens/BTC')
 
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(400)
     expect(response.body).toEqual({ error: 'Unable to delete token' })
+  })
+
+  it('should not be able to delete a token if it has a invalid token length', async () => {
+    const response = await request(app).delete('/tokens/BTCBTCB')
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({
+      errors: [
+        {
+          location: 'params',
+          msg: expect.any(String),
+          param: 'tokenId',
+          value: 'BTCBTCB',
+        },
+      ],
+    })
+  })
+
+  it('should not be able to delete a token if it is not available', async () => {
+    //@ts-ignore
+    CryptoService.mockImplementation(() => {
+      return {
+        deleteCrypto: (tokenId: string) => {
+          throw new Error('Invalid token')
+        },
+      }
+    })
+
+    const response = await request(app).delete('/tokens/AAA')
+
+    expect(response.status).toBe(400)
+    expect(response.body).toEqual({ error: 'Invalid token' })
   })
 
   it('should be able to delete a token', async () => {
@@ -313,30 +345,5 @@ describe('DELETE', () => {
     const response = await request(app).delete('/tokens/BTC')
 
     expect(response.status).toBe(200)
-  })
-
-  it('should be able to delete a token', async () => {
-    //@ts-ignore
-    CryptoService.mockImplementation(() => {
-      return {
-        deleteCrypto: (tokenId: string) => {
-          return true
-        },
-      }
-    })
-
-    const response = await request(app).delete('/tokens/BTCBTCB')
-
-    expect(response.status).toBe(400)
-    expect(response.body).toEqual({
-      errors: [
-        {
-          location: 'params',
-          msg: expect.any(String),
-          param: 'tokenId',
-          value: 'BTCBTCB',
-        },
-      ],
-    })
   })
 })
